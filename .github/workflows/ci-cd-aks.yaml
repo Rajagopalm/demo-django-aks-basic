@@ -37,9 +37,11 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
           IMAGE="$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-          docker build -f Dockerfile.prod -t $IMAGE .
+          IMAGE_LATEST="$ACR_NAME.azurecr.io/$IMAGE_NAME:latest"
+          echo "IMAGE=$IMAGE_LATEST" >> $GITHUB_ENV
+          docker build -f Dockerfile.prod -t $IMAGE -t $IMAGE_LATEST .
           docker push $IMAGE
+          docker push $IMAGE_LATEST
 
       - name: Get AKS credentials
         run: az aks get-credentials -g $RG_NAME -n $AKS_NAME --overwrite-existing
