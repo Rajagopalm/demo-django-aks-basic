@@ -1,0 +1,29 @@
+# Terraform
+infra/.terraform/
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/.terraform.lock.hcl
+
+# Python
+*.pyc
+__pycache__/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Django
+my-django-demo/db.sqlite3
+
+# Kubernetes secrets
+k8s/secret.yaml
+

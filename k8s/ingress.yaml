@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-ingress
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: yourdomain.com # or omit host to use IP
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: django-svc
+                port:
+                  number: 80

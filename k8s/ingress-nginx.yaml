@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: install-ingress-nginx
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: helm
+          image: alpine/helm:3.14.2
+          command:
+            - /bin/sh
+            - -c
+            - |
+              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+              helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+                --namespace ingress-nginx --create-namespace \
+                --set controller.service.type=LoadBalancer
+      restartPolicy: OnFailure
