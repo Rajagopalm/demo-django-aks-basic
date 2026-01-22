@@ -13,8 +13,8 @@ jobs:
       id-token: write   # OIDC token for Azure federation
 
     env:
-      RG_NAME: rg-madhuravoyal-aks
-      AKS_NAME: aks-madhuravoyal
+      RG_NAME: rg-django-app-aks
+      AKS_NAME: aks-django-app
       ACR_NAME: acrdjangoapp
       IMAGE_NAME: django-app
       SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # set as a repo variable
