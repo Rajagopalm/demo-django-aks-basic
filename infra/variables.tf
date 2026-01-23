@@ -33,3 +33,8 @@ variable "node_size" {
 	type    = string
 	default = "standard_dc2ds_v3"
 }
+
+variable "github_repo" {
+  type        = string
+  description = "GitHub repository in the format owner/repo for OIDC federation."
+}
