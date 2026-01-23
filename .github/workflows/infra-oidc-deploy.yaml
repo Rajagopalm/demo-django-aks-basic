@@ -31,14 +31,30 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           enable-AzPSSession: false
 
+      - name: Show Azure account info
+        run: az account show
+
+      - name: Show Azure subscriptions
+        run: az account list --output table
+
+      - name: Show Terraform version
+        run: terraform version
+
+      - name: Show backend config (if any)
+        run: |
+          if [ -f infra/backend.tf ]; then cat infra/backend.tf; else echo "No backend.tf found"; fi
+
+      - name: Show resource group info
+        run: az group show --name ${{ env.RG_NAME }} || echo "Resource group not found"
+
       - name: Terraform Init
         run: terraform init
         working-directory: infra
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: Terraform Plan (with timeout)
+        run: timeout 600 terraform plan -out=tfplan
         working-directory: infra
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+      - name: Terraform Apply (with timeout)
+        run: timeout 600 terraform apply -auto-approve tfplan
         working-directory: infra
