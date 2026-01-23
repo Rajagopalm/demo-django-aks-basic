@@ -6,8 +6,11 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
+  # IMPORTANT: For local testing, add this to your hosts file:
+  # 20.81.106.177 testdomain.local
   rules:
-    - host: yourdomain.com # or omit host to use IP
+    - host: testdomain.local
       http:
         paths:
           - path: /
