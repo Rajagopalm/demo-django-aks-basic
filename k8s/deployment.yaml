@@ -20,7 +20,7 @@ spec:
             - containerPort: 8000
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: "project.settings.production"
+              value: "project.settings"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
