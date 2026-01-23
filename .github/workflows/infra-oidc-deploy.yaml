@@ -72,11 +72,10 @@ jobs:
             ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
             ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
+
       - name: Terraform Plan
         id: plan
-        run: |
-            terraform plan -no-color -out=tfplan
-            terraform show -no-color tfplan
+        run: terraform plan -no-color
         continue-on-error: true
         working-directory: infra
         env:
@@ -93,7 +92,8 @@ jobs:
         if: |
             (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
             (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve
+        working-directory: infra
         env:
             ARM_USE_OIDC: true
             ARM_CLIENT_ID: ${{ secrets.AZURE_FEDERATED_CLIENT_ID }}
