@@ -66,7 +66,7 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
           IMAGE="$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
-          kubectl set image deployment/django-app django-app=$IMAGE -n web
+          kubectl set image deployment/django-app django=$IMAGE -n web
 
       - name: Create/Update Django Secrets
         run: |
