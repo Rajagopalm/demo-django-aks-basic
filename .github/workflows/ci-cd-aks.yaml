@@ -58,6 +58,14 @@ jobs:
         run: |
           sed -i "s|image: .*|image: $IMAGE|g" k8s/deployment.yaml
 
+      - name: Create/Update Django Secrets
+        run: |
+          kubectl create secret generic django-secrets \
+            --from-literal=SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY || 'dummy-secret' }}" \
+            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL || 'sqlite:///db.sqlite3' }}" \
+            --from-literal=ALLOWED_HOSTS="${{ secrets.ALLOWED_HOSTS || '*' }}" \
+            -n web --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy app
         run: |
           kubectl apply -f k8s/deployment.yaml
