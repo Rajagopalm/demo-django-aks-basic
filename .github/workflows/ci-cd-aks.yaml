@@ -62,6 +62,12 @@ jobs:
         run: |
           sed -i "s|image: .*|image: $IMAGE|g" k8s/deployment.yaml
 
+      - name: Set deployment image to new tag
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          IMAGE="$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
+          kubectl set image deployment/django-app django-app=$IMAGE -n web
+
       - name: Create/Update Django Secrets
         run: |
           kubectl create secret generic django-secrets \
