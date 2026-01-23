@@ -57,7 +57,7 @@ resource "azuread_application_federated_identity_credential" "github_oidc_cred" 
 
 
 resource "azuread_service_principal" "github_oidc_sp" {
-  client_id = azuread_application.github_oidc.app_id
+  client_id = azuread_application.github_oidc.id
 }
 
 # Assign AcrPull to federated identity
