@@ -45,19 +45,19 @@ resource "azuread_application" "github_oidc" {
 
 
 resource "azuread_application_federated_identity_credential" "github_oidc_cred" {
-  application_object_id = azuread_application.github_oidc.object_id
-  display_name          = "github-main-branch"
-  description           = "Federated credential for GitHub Actions main branch"
-  audiences             = ["api://AzureADTokenExchange"]
-  issuer                = "https://token.actions.githubusercontent.com"
-  subject               = "repo:${var.github_repo}:ref:refs/heads/main"
+  application_id = azuread_application.github_oidc.application_id
+  display_name   = "github-main-branch"
+  description    = "Federated credential for GitHub Actions main branch"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = "repo:${var.github_repo}:ref:refs/heads/main"
 }
 
 # Service Principal for the Azure AD Application
 
 
 resource "azuread_service_principal" "github_oidc_sp" {
-  application_id = azuread_application.github_oidc.object_id
+  client_id = azuread_application.github_oidc.application_id
 }
 
 # Assign AcrPull to federated identity
