@@ -35,6 +35,7 @@ variable "node_size" {
 }
 
 variable "github_repo" {
-  type        = string
-  description = "GitHub repository in the format owner/repo for OIDC federation."
+  type        	= string
+  description 	= "GitHub repository in the format owner/repo for OIDC federation."
+  default 		= "Rajagopalm/demo-django-aks-basic"
 }
