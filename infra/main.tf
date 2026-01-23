@@ -65,4 +65,18 @@ resource "azurerm_role_assignment" "github_oidc_acr_pull" {
   principal_id         = azuread_service_principal.github_oidc_sp.object_id
 }
 
+# Automated AcrPull Role Assignment for All Node Pools
+# This will assign AcrPull to every kubelet identity in the AKS cluster (supports multiple node pools)
+data "azurerm_kubernetes_cluster" "aks" {
+  name                = var.aks_name
+  resource_group_name = var.rg_name
+}
+
+resource "azurerm_role_assignment" "acr_pull" {
+  for_each             = { for k, v in data.azurerm_kubernetes_cluster.aks.kubelet_identity : k => v }
+  principal_id         = each.value.object_id
+  role_definition_name = "AcrPull"
+  scope                = azurerm_container_registry.acr.id
+}
+
 

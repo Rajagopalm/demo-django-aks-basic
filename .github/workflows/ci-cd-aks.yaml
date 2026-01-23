@@ -54,6 +54,10 @@ jobs:
       - name: Install Nginx Ingress (if not present)
         run: kubectl apply -f k8s/ingress-nginx.yaml
 
+      - name: Install NGINX Ingress Controller (Official)
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
+
       - name: Update deployment image
         run: |
           sed -i "s|image: .*|image: $IMAGE|g" k8s/deployment.yaml
