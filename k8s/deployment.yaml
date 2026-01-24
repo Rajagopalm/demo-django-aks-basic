@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: django
-          image: acrdjangoapp.azurecr.io/django-app:795d7283181f7fc0a0605839ebcfe0ad1a93800a
+          image: acrdjangoapp.azurecr.io/django-app:e4e2f393cba141ee2e68972b182a19f3a1f99f7d
           ports:
             - containerPort: 8000
           env:
