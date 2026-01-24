@@ -76,11 +76,9 @@ data "azurerm_kubernetes_cluster" "aks" {
 
 # Assign AcrPull to kubelet identity for all node pools (automated)
 resource "azurerm_role_assignment" "acr_pull_kubelet" {
-  count                = length(data.azurerm_kubernetes_cluster.aks.kubelet_identity)
-  principal_id         = data.azurerm_kubernetes_cluster.aks.kubelet_identity[count.index].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.acr.id
   depends_on           = [azurerm_kubernetes_cluster.aks, azurerm_container_registry.acr]
 }
-
 
