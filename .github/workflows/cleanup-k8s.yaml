@@ -7,11 +7,8 @@ on:
       destroy:
         description: 'Run terraform destroy after Kubernetes cleanup?'
         required: true
-        default: 'no'
-        type: choice
-        options:
-          - yes
-          - no
+        default: false
+        type: boolean
 
 env:
   RG_NAME: rg-django-app-aks
@@ -63,7 +60,7 @@ jobs:
 
   terraform-destroy:
     needs: cleanup-k8s
-    if: ${{ github.event.inputs.destroy == 'yes' }}
+    if: ${{ github.event.inputs.destroy == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
