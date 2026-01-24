@@ -5,6 +5,15 @@ on:
     branches: [main]
 
 env:
+  RG_NAME: rg-django-app-aks
+  AKS_NAME: aks-django-app
+  ACR_NAME: acrdjangoapp
+  IMAGE_NAME: django-app
+  NAMESPACE: web
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
