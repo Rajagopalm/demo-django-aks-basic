@@ -33,7 +33,7 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
           IMAGE="$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
-          docker build -t $IMAGE .
+          docker build -f Dockerfile.prod -t $IMAGE .
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
       - name: ACR login
