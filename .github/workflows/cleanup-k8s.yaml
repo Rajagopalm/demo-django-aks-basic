@@ -54,7 +54,12 @@ jobs:
 
 
       - name: Delete NGINX Ingress Controller
-        run: kubectl delete -f k8s/ingress-nginx.yaml --ignore-not-found
+        run: |
+          if [ -f k8s/ingress-nginx.yaml ]; then
+            kubectl delete -f k8s/ingress-nginx.yaml --ignore-not-found
+          else
+            echo "k8s/ingress-nginx.yaml not found, skipping."
+          fi
 
   terraform-destroy:
     needs: cleanup-k8s
