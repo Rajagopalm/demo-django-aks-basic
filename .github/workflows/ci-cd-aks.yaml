@@ -51,6 +51,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set IMAGE variable
+        run: echo "IMAGE=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}" >> $GITHUB_ENV
+
       - name: Update manifest image tag
         run: |
           sed -i "s|image: .*$|image: $IMAGE|" k8s/deployment.yaml
