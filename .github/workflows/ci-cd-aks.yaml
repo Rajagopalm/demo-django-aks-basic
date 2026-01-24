@@ -75,28 +75,7 @@ jobs:
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group $RG_NAME --name $AKS_NAME --overwrite-existing
 
-      - name: Deploy to AKS
-        run: kubectl apply -f k8s/deployment.yaml -n $NAMESPACE
-name: ci-cd-aks
 
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write   # OIDC token for Azure federation
-
-    env:
-      RG_NAME: rg-django-app-aks
-      AKS_NAME: aks-django-app
-      ACR_NAME: acrdjangoapp
-      IMAGE_NAME: django-app
-      SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # set as a repo variable
 
     steps:
       - name: Checkout
