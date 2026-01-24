@@ -1,0 +1,81 @@
+name: Cleanup Kubernetes Resources
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy:
+        description: 'Run terraform destroy after Kubernetes cleanup?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
+
+env:
+  RG_NAME: rg-django-app-aks
+  AKS_NAME: aks-django-app
+  NAMESPACE: web
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cleanup-k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_FEDERATED_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: false
+
+      - name: Get AKS Credentials
+        run: az aks get-credentials --resource-group $RG_NAME --name $AKS_NAME --overwrite-existing
+
+      - name: Delete Django Deployment
+        run: kubectl delete deployment django-app -n $NAMESPACE --ignore-not-found
+
+      - name: Delete Django Service
+        run: kubectl delete service django-svc -n $NAMESPACE --ignore-not-found
+
+      - name: Delete Django Ingress
+        run: kubectl delete ingress django-ingress -n $NAMESPACE --ignore-not-found
+
+      - name: Delete Django Secret
+        run: kubectl delete secret django-secrets -n $NAMESPACE --ignore-not-found
+
+      - name: Delete Namespace
+        run: kubectl delete namespace $NAMESPACE --ignore-not-found
+
+
+      - name: Delete NGINX Ingress Controller
+        run: kubectl delete -f k8s/ingress-nginx.yaml --ignore-not-found
+
+  terraform-destroy:
+    needs: cleanup-k8s
+    if: ${{ github.event.inputs.destroy == 'yes' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_FEDERATED_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: false
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: infra
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: infra
