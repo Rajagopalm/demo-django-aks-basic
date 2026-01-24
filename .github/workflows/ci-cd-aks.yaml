@@ -1,8 +1,13 @@
 name: CI/CD AKS Pipeline
 
+
 on:
   push:
     branches: [main]
+    paths:
+      - 'infra/**'
+      - 'k8s/**'
+      - '.github/workflows/ci-cd-aks.yaml'
 
 env:
   RG_NAME: rg-django-app-aks
