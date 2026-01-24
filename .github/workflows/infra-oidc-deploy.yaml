@@ -115,6 +115,7 @@ jobs:
       - name: Terraform Destroy
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
         run: terraform destroy -auto-approve
+        working-directory: infra
         env:
             ARM_USE_OIDC: true
             ARM_CLIENT_ID: ${{ secrets.AZURE_FEDERATED_CLIENT_ID }}
