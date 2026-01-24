@@ -1,11 +1,11 @@
 output "acr_login_server" {
-  value = azurerm_container_registry.acr.login_server
+  value = module.acr.name
 }
 
 output "aks_rg" {
-  value = azurerm_resource_group.rg.name
+  value = module.network.name
 }
 
 output "aks_name" {
-  value = azurerm_kubernetes_cluster.aks.name
+  value = module.aks.id
 }
