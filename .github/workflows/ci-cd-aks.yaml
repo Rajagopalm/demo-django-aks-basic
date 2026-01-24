@@ -11,6 +11,8 @@ env:
   IMAGE_NAME: django-app
   NAMESPACE: web
 
+permissions:
+  contents: write
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
